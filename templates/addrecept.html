@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2 ng-show="!isLoggdIn">Logga in för att lägga till ett Recept</h2>
+            <div ng-show="isLoggdIn">
+                <div class="jumbotron ">
+                    <p>Lägg till recept</p>
+                    <form ng-submit="addRecept()">
+                        <br/><label>Recept Namn <input type="text" ng-model="r_namn" /></label>
+                        <br/><label>instruktion<input type="text" ng-model="instruktion" /></label>
+                        <br/><label>bild<input type="text" ng-model="imglink" /></label>
+                        <label>Kategori <select ng-model="kategori">
+                                <option ng-repeat="kategori in kategori" value="{{kategori.recept_id}}"></option>
+                            </select></label>
+                        <button type="submit" class="btn btn-info">Lägg till recept</button>
+                    </form>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h1 class="page-header">Senaste Recept</h1>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-xs-6 thumb " ng-repeat="recept in table">
+                <a class="thumbnail" class="zero" href="#">
+                    <img src={{recept.imglink}} alt="">
+                    <p>{{recept.r_namn}}</p>
+                    <p>{{recept.kategori}}</p>
+                </a>
+            </div>
+        </div>
+
+        <hr>
+
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Linus</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>

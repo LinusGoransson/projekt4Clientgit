@@ -1,0 +1,47 @@
+<nav class="navbar navbar-inverse navbar-fixed-top navbartext" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Recept</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">Registrera</a>
+                </li>
+                <li>
+                    <a href="index.html#/addrecept">Lägg till recept</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle logintext" data-toggle="dropdown"><b>Logga in</b> <span class="caret"></span></a>
+                    <ul id="login-dp" class="dropdown-menu">
+                        <li>
+                            <div class="row">
+                                <div class="col-md-12 login" >
+                                    <form class="form" accept-charset="UTF-8" id="login-nav" ng-controller="loggInCtrl">
+                                            <label>Username <input type="text" ng-model="username"/></label><br/>
+                                            <label>Password <input type="password" ng-model="password"/></label><br/>
+                                            <button class="btn btn-info" ng-click="loggIn()">Logga in</button>
+                                        </form>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"> håll mig inloggad </>
+                                            </label>
+                                        </div>
+                                </div>
+                                <div class="bottom text-center">
+                                    Inget inlogg? <a href="#"><b>Registrera dig här!</b></a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
