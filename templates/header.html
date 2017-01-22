@@ -12,12 +12,18 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">Registrera</a>
+                    <a href="#">Info</a>
                 </li>
                 <li>
-                    <a href="index.html#/addrecept">Lägg till recept</a>
+                    <a href="#">Alla recept</a>
                 </li>
-                <li class="dropdown">
+                <li>
+                    <a ng-hide="!isLoggdIn" href="index.html#/addrecept">Lägg till recept</a>
+                </li>
+                <li>
+                    <a ng-hide="!isLoggdIn" href="index.html#/addrecept">Mina Recept</a>
+                </li>
+                <li class="dropdown" ng-hide="isLoggdIn">
                     <a href="#" class="dropdown-toggle logintext" data-toggle="dropdown"><b>Logga in</b> <span class="caret"></span></a>
                     <ul id="login-dp" class="dropdown-menu">
                         <li>
@@ -35,7 +41,7 @@
                                         </div>
                                 </div>
                                 <div class="bottom text-center">
-                                    Inget inlogg? <a href="#"><b>Registrera dig här!</b></a>
+                                    Inget inlogg? <a href="index.html#/register"><b>Registrera dig här!</b></a>
                                 </div>
                             </div>
                         </li>
