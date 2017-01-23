@@ -26,11 +26,35 @@ module.controller("homeCtrl", function ($scope, ReceptService) {
         console.log(data.data);
         $scope.table = data.data;
     });
+    
+    $scope.open = function (index){
+        receptShow = true;
+        var namn, bild, instruktion, author, kategori;
+        namn = $scope.table[index].r_namn;
+        bild = $scope.table[index].imglink;
+        instruktion = $scope.table[index].instruktion;
+        author = $scope.table[index].author;
+        kategori = $scope.table[index].kategori;
+//        console.log(namn);
+//        console.log(bild);
+//        console.log(instruktion);
+//        console.log(author);
+//        console.log(kategori);
+        document.querySelector('.results').innerHTML = '<h1>'+namn+'</h1><img src='+bild+'><p>Kategori: '+kategori+'</p><p>Instruktion: '+instruktion+'</p><p>Av användare: '+author+'</p>';
+    };
 });
 
 module.controller("addreceptCtrl", function ($scope, $rootScope, ReceptService) {    
     $scope.addRecept = function () {
         ReceptService.addRecept($scope.r_namn,$scope.instruktion,Number($scope.author),$scope.kategori,$scope.imglink);
+    };
+     var promise = ReceptService.getIng();
+    promise.then(function (data) {
+        console.log(data.data);
+        $scope.Ing = data.data;
+    });
+    $scope.addRec_Ing = function () {
+        ReceptService.addRecept($scope.amount,Number($scope.i_id),Number($scope.r_id));
     };
 });
 
@@ -55,6 +79,15 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
         return deffer.promise;
     };
     
+    this.getIng = function () {
+        var deffer = $q.defer();
+        var url = "http://localhost:8080/projekt4git/webresources/ing";
+        $http.get(url).then(function (data) {
+            deffer.resolve(data);
+        });
+        return deffer.promise;
+    };
+    
     this.loggIn = function (username, password) {
         var url = "http://localhost:8080/projekt4git/webresources/login";
         var auth = "Basic " + window.btoa(username + ":" + password);
@@ -69,7 +102,8 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
             $rootScope.user = username;
             $rootScope.pass = password;
         },function(data){
-           console.log("Du kan inte logga in"); 
+           console.log("Du kan inte logga in");
+           alert("Fel vid inlogg!");
         });
     };
     
@@ -118,7 +152,32 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
             alert("xD");
            console.log("du la inte till ett recept"); 
         });
+        console.log($rootScope.user);
     };
+    
+    this.addRec_Ing = function (i_id,r_id,amount) {
+        var data = {
+            i_id:i_id,
+            r_id:r_id,
+            amount:amount
+        };
+        var url = "http://localhost:8080/projekt4git/webresources/Rec_Ing";
+        var auth = "Basic " + window.btoa($rootScope.user + ":" + $rootScope.pass);
+        $http({
+            url: url,
+            method: "POST",
+            data:data,
+            headers: {'Authorization': auth}
+        }).then(function (data) {
+            alert("Du har lagt till en ingrediens, lägg till mer eller klicka på klar!");
+            console.log("Du la till en ingrediens");
+            $rootScope.isRecept = true;
+        },function(data){
+            alert("xD");
+           console.log("du la inte till en ingrediens"); 
+        });
+    };
+
     
     
 });

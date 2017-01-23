@@ -17,8 +17,11 @@
                 <div class="jumbotron " ng-hide="!isRecept">
                     <p>Lägg till ingredienser</p>
                     <form ng-controller="addreceptCtrl">
-                        <br/><label>Recept Namn <input type="text" ng-model="r_namn" /></label>           
-                        <button class="btn btn-info" ng-click="addRecept()">Lägg till recept</button>
+                        <label>Ingrediens<select>
+                        <option ng-repeat="ingrediens in Ing" value="{{ingrediens.id}}">{{ingrediens.i_namn}}</option>
+                        </select></label>
+                        <br/><label>Mått <input type="text" ng-model="amount" /></label>     
+                        <button class="btn btn-info" ng-click="addIngrediens()">Lägg till ingrediens</button>
                     </form>  
                 </div>
             </div>
