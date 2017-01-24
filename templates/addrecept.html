@@ -6,22 +6,28 @@
                 <div class="jumbotron " ng-hide="isRecept">
                     <p>Lägg till recept</p>
                     <form ng-controller="addreceptCtrl">
-                        <br/><label>Recept Namn <input type="text" ng-model="r_namn" /></label>
+                        <br/><label>receptnamn <input type="text" ng-model="r_namn" /></label>
                         <br/><label>instruktion<input type="text" ng-model="instruktion" /></label>
                         <br/><label>bild<input type="text" ng-model="imglink" /></label>
-                        <br/><label>kategori<input type="text" ng-model="kategori" /></label>            
-                        <br/><label>author<input type="text" ng-model="author" /></label>            
+                        <br/><label>kategori<select ng-model="kategori">
+                            <option value="fisk">fisk</option>
+                            <option value="kött">kött</option>
+                            <option value="lättlagat">lättlagat</option>
+                            <option value="vegetariskt">vegetariskt</option>
+                            <option value="övrigt">övrigt</option>
+                            </select></label>
+
                         <button class="btn btn-info" ng-click="addRecept()">Lägg till recept</button>
                     </form>  
                 </div>
                 <div class="jumbotron " ng-hide="!isRecept">
                     <p>Lägg till ingredienser</p>
                     <form ng-controller="addreceptCtrl">
-                        <label>Ingrediens<select>
+                        <label>Ingrediens<select ng-model="i_id">
                         <option ng-repeat="ingrediens in Ing" value="{{ingrediens.id}}">{{ingrediens.i_namn}}</option>
                         </select></label>
                         <br/><label>Mått <input type="text" ng-model="amount" /></label>     
-                        <button class="btn btn-info" ng-click="addIngrediens()">Lägg till ingrediens</button>
+                        <button class="btn btn-info" ng-click="addRec_Ing()">Lägg till ingrediens</button>
                     </form>  
                 </div>
             </div>

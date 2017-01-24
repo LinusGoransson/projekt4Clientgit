@@ -1,25 +1,31 @@
     <div class="container">
 
         <div class="row" ng-hide="receptShow">
-
+<input type="text" name="search" ng-model="query" placeholder="Search..">
             <div class="col-lg-12">
                 <h1 class="page-header">Recept</h1>
             </div>
 
-            <div class="col-lg-3 col-md-4 col-xs-6 thumb " ng-repeat="recept in table">
+            <div class="col-lg-3 col-md-4 col-xs-6 thumb " ng-repeat="recept in table| filter:query">
                 <a class="thumbnail zero" href="#">
                     <img src={{recept.imglink}} alt="bildlänk">
                 </a>
                     <p>{{recept.r_namn}}</p>
                     <p>{{recept.kategori}}</p>
                     <p>{{recept.recept_id}}</p>
-                    <p>{{table[index].r_namn}}</p>
                     <a class="btn btn-warning" ng-click="open($index)">Klicka</a>
             </div>
         </div>
-        <div class="col-lg-12" ng-hide="receptShow" >
-            <div class="results"></div>
+        <div class="results"></div>
+        <div class="col-lg-12" ng-hide="!receptShow" ng-repeat="ingrediens in ingredienser">
+            <table>
+                <tr>
+                    <td>{{ingrediens.i_namn}}-</td>
+                    <td>-{{ingrediens.amount}}</td>
+                </tr>
+            </table>
         </div>
+        
 
         <hr>
 
