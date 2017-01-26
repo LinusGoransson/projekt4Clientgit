@@ -1,17 +1,9 @@
-<html>
-    <head>
-        <title>Register</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Registrera dig</h1>
-            <form class="form" accept-charset="UTF-8" id="register" ng-controller="registerCtrl">
-                <label>Username <input type="text" ng-model="username"/></label><br/>
-                <label>Password <input type="password" ng-model="password"/></label><br/>
-                <button class="btn btn-info" ng-click="register()">Registrera</button>
-            </form>
-        </div>
-    </body>
-</html>
+<div class="jumbotron container">
+    <h1>Registrera dig</h1>
+    <form class="form" accept-charset="UTF-8" id="register" ng-controller="registerCtrl">
+        <label>Användarnamn <input type="text" ng-model="username"/></label><br/>
+        <label>Lösenord <input type="password" ng-model="password"/></label><br/>
+        <button class="btn btn-info" ng-click="register()">Registrera</button>
+    </form>
+</div>
+

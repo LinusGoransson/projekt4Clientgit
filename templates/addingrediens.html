@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2>Lägg till ingredienser</h2>
+            <div ng-show="isLoggdIn">
+                <div class="jumbotron " ng-hide="!isRecept">
+                    <p>Lägg till recept</p>
+                    <form ng-controller="addingrediensCtrl" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Ingredienser</label>
+                            <div class="col-sm-10">
+                                <select ng-model="i_id">
+                                    <option ng-repeat="ingrediens in Ing" value="{{ingrediens.id}}">{{ingrediens.i_namn}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Mått</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" ng-model="amount" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button class="btn btn-info" ng-click="addRec_Ing()">Lägg till ingrediens</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="resultsIng">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

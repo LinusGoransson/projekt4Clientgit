@@ -1,3 +1,5 @@
+/* global $rootScope */
+
 var module = angular.module("projekt4", ["ui.router"]);
 
 
@@ -17,10 +19,26 @@ module.config(function ($urlRouterProvider, $stateProvider) {
         url: "/addrecept",
         templateUrl: "templates/addrecept.html",
         controller:"addreceptCtrl"
+    }).state("addingrediens", {
+        url: "/addingrediens",
+        templateUrl: "templates/addingrediens.html",
+        controller:"addingrediensCtrl"
     });
 });
 
-module.controller("homeCtrl", function ($scope, ReceptService) {
+module.controller("homeCtrl", function ($scope, ReceptService,$rootScope) {
+        $scope.deleteRec = function (id,author){
+            if($rootScope.user === author){
+                return ReceptService.deleteRec(id);
+
+            } else {
+                alert("Inte ditt recept bror");
+                console.log("recepter tillhör " +author);
+            }
+            
+            
+   };
+      
     var promise = ReceptService.getTable();
     promise.then(function (data) {
         console.log(data.data);
@@ -34,23 +52,14 @@ module.controller("homeCtrl", function ($scope, ReceptService) {
     });
     
     $scope.open = function (index){
-            
-//        console.log($scope.Rec_Ing[index].amount);
-//        console.log($scope.Rec_Ing[index].i_namn);
-//        console.log($scope.table[index].recept_id);
         
-        var namn, bild, instruktion, author, kategori;
+        var namn, bild, instruktion, kategori;
         namn = $scope.table[index].r_namn;
         bild = $scope.table[index].imglink;
         instruktion = $scope.table[index].instruktion;
         author = $scope.table[index].author;
         kategori = $scope.table[index].kategori;
-        
-//        console.log(namn);
-//        console.log(bild);
-//        console.log(instruktion);
-//        console.log(author);
-//        console.log(kategori);
+
         document.querySelector('.results').innerHTML = '<h1>'+namn+'</h1><img src='+bild+'><p>Kategori: '+kategori+'</p><p>Instruktion: '+instruktion+'</p><p>Av användare: '+author+'</p>';
         var promise = ReceptService.getRec_Ing($scope.table[index].recept_id);
         
@@ -62,26 +71,31 @@ module.controller("homeCtrl", function ($scope, ReceptService) {
     };
 });
 
-module.controller("addreceptCtrl", function ($scope, $rootScope, ReceptService) {    
-    $scope.addRecept = function () {
-        ReceptService.addRecept($scope.r_namn,$scope.instruktion,Number($scope.author),$scope.kategori,$scope.imglink);
-    };
+module.controller("addingrediensCtrl", function ($scope, $rootScope, ReceptService) {    
+
      var promise = ReceptService.getIng();
     promise.then(function (data) {
         console.log("Ingredienser"+data.data);
         $scope.Ing = data.data;
     });
+    var promise = ReceptService.getLastRec();
+    promise.then(function (data) {
+        console.log("lastrec"+data.data);
+        $rootScope.LastRec = data.data;
+    });
+    
     
     $scope.addRec_Ing = function () {
-        $rootScope.LastRec = $scope.LastRec[0].recept_id+1;
-        ReceptService.addRec_Ing($scope.amount,Number($scope.i_id));
+        ReceptService.addRec_Ing(Number($scope.i_id),$scope.amount,$rootScope.LastRec[0].recept_id,$scope.i_namn);
     };
-    var promise = ReceptService.getLastRec();
-        promise.then(function (data) {
-        $scope.LastRec = data.data;
-        ;
-    });
+
    
+});
+
+module.controller("addreceptCtrl", function ($scope, $rootScope, ReceptService) {    
+    $scope.addRecept = function () {
+        ReceptService.addRecept($scope.r_namn,$scope.instruktion,Number($scope.author),$scope.kategori,$scope.imglink);
+    };   
 });
 
 module.controller("registerCtrl", function ($scope, ReceptService){    
@@ -105,6 +119,15 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
         return deffer.promise;
     };
     
+    this.getLastRec = function () {
+        var deffer = $q.defer();
+        var url = "http://localhost:8080/projekt4git/webresources/LastRec";
+        $http.get(url).then(function (data) {
+            deffer.resolve(data);
+        });
+        return deffer.promise;
+    };
+    
     this.getRec_Ing = function (id) {
         var deffer = $q.defer();
         var url = "http://localhost:8080/projekt4git/webresources/Rec_Ing/"+id;
@@ -117,14 +140,6 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
     this.getIng = function () {
         var deffer = $q.defer();
         var url = "http://localhost:8080/projekt4git/webresources/ing";
-        $http.get(url).then(function (data) {
-            deffer.resolve(data);
-        });
-        return deffer.promise;
-    };
-    this.getLastRec = function () {
-        var deffer = $q.defer();
-        var url = "http://localhost:8080/projekt4git/webresources/LastRec";
         $http.get(url).then(function (data) {
             deffer.resolve(data);
         });
@@ -163,6 +178,7 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
             data:data
         }).then(function (data) {
             console.log("Du är registrerad");
+            alert("Du kan nu logga In");
             $rootScope.isRegistrerad = true;
             $rootScope.user = username;
             $rootScope.pass = password;
@@ -188,25 +204,23 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
             data:data,
             headers: {'Authorization': auth}
         }).then(function (data) {
-            alert("Du har lagt till ett recept!Lägg nu till vilka ingredienser!");
             console.log("Du la till et recept");
             $rootScope.isRecept = true;
             
         },function(data){
-            alert("xD");
            console.log("du la inte till ett recept"); 
         });
         console.log($rootScope.user);
     };
     
-    this.addRec_Ing = function (i_id,amount) {
-        console.log($rootScope.LastRec);
+    this.addRec_Ing = function (i_id,amount,i_namn) {
         console.log(i_id);
         console.log(amount);
+        console.log($rootScope.LastRec[0].recept_id);
         var data = {
-            r_id:$rootScope.LastRec,
-            i_id:amount,
-            amount:i_id
+            r_id:$rootScope.LastRec[0].recept_id,
+            i_id:i_id,
+            amount:amount
         };
         var url = "http://localhost:8080/projekt4git/webresources/Rec_Ing";
         var auth = "Basic " + window.btoa($rootScope.user + ":" + $rootScope.pass);
@@ -216,12 +230,29 @@ module.service("ReceptService", function ($q, $http, $rootScope) {
             data:data,
             headers: {'Authorization': auth}
         }).then(function (data) {
-            alert("Du har lagt till en ingrediens, lägg till mer eller klicka på klar!");
             console.log("Du la till en ingrediens");
+            document.querySelector('.resultsIng').innerHTML = 'Du har lagt till ingrediensen med id: '+i_id+'';
         },function(data){
-            alert("xD");
            console.log("du la inte till en ingrediens"); 
         });
+    };
+    
+    this.deleteRec = function (id){
+            var url = "http://localhost:8080/projekt4git/webresources/rec/"+id;
+            
+        var auth = "Basic " + window.btoa($rootScope.user + ":" + $rootScope.pass);
+        
+        $http({
+            url: url,
+            method: "DELETE",
+            headers: {'Authorization': auth}
+            
+        }).success(function (data, status) {
+            console.log("Recept borttagen");
+        }).error(function (data, status) {
+            console.log("det blev fel vid radering");
+        });
+        
     };
 
     
